@@ -13,13 +13,15 @@ const (
 	addr = "127.0.0.1:8080"
 )
 
+type User struct {
+	Name     string
+	UserName string
+}
+
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		lib.WriteJSON(w, http.StatusOK, "Rate Limiter Test")
-	})
-
+	lib.RegisterRoutes(mux)
 	handler := middleware.RateLimiterMiddleware(mux, limiter.NewSlidingWindowLimiter(1, 2))
 
 	fmt.Println("Server starting on address:", addr)
